@@ -56,7 +56,7 @@ namespace PersonalLogger
             set
             {
                 _date = value.Date;
-                SwitchLogFile();
+                UpdateLogFile();
             }
             get
             {
@@ -65,7 +65,7 @@ namespace PersonalLogger
         }
 
         
-        public void SwitchLogFile()
+        public void UpdateLogFile()
         {
             if (oldDate != null)
             {
@@ -73,35 +73,38 @@ namespace PersonalLogger
                 SaveToFile();
             }
 
-
-            try
+            if (oldDate != Date)
             {
-                collection.Clear();
 
-                FileStream fs = new FileStream(DocumentFolder + @"\" + Date.ToString("yyyy-MM-dd") + ".txt", FileMode.Open);
-                StreamReader sr = new StreamReader(fs);
-
-                
-                while (true)
+                try
                 {
-                    string line = sr.ReadLine();
-                    if (line == null)
+                    collection.Clear();
+
+                    FileStream fs = new FileStream(DocumentFolder + @"\" + Date.ToString("yyyy-MM-dd") + ".txt", FileMode.Open);
+                    StreamReader sr = new StreamReader(fs);
+
+
+                    while (true)
                     {
-                        break;
+                        string line = sr.ReadLine();
+                        if (line == null)
+                        {
+                            break;
+                        }
+                        if (line.Trim().Length == 0)
+                        {
+                            continue;
+                        }
+                        collection.Add(line);
+
                     }
-                    if (line.Trim().Length == 0)
-                    {
-                        continue;
-                    }
-                    collection.Add(line);
+
+                    sr.Close();
+                }
+                catch
+                {
 
                 }
-
-                sr.Close();
-            }
-            catch
-            {
-
             }
             oldDate = Date;
         }

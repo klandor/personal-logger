@@ -49,10 +49,11 @@ namespace PersonalLogger
             {
                 dateTimePicker.Value = DateTime.Now.Date;
                 logListBox.Items.Add("[" + DateTime.Now.ToString("HH:mm:ss") + "]: " + log);
-                inputTextBox.Text = ""; 
+                
                 logListBox.TopIndex = logListBox.Items.Count-1;
-                //listBox1.SelectedIndex = -1;
             }
+            saver.UpdateLogFile();
+            inputTextBox.Text = ""; 
             inputTextBox.Focus();
         }
 
@@ -71,7 +72,7 @@ namespace PersonalLogger
             logButton.Enabled = isToday;
 
             saver.Date = dateTimePicker.Value.Date;
-            saver.SwitchLogFile();
+            saver.UpdateLogFile();
         }
 
         #region date maniputation buttons
